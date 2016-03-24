@@ -1,6 +1,7 @@
 # ProxyPluginActivityDemo
 一个demo，代理方式实现插件化，一个最简单的插件框架雏形。
-＃博客
+
+#博客
 文章首发：[插件化研究代之Activity注册｜大利猫](http://www.liuguangli.win/?p=387)
 
 最近在研究Android应用的插件化开发，看了好几个相关的开源项目。  插件化都是在解决以下几个问题：
