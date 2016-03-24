@@ -141,6 +141,6 @@
     }
 #最重要的demo
 demo实现啦一个插件的框架的最基本雏形，地址：
-[https://github.com/liuguangli/ProxyPluginActivityDemo](https://github.com/liuguangli/ProxyPluginActivityDemo)，如果你有兴趣，一定要star，日后研究研究。代理方式实现起来比较简单，也比较好理解，但是有很多缺陷：一、插件Activity不能使用this关键字，比如this.finish()方法是无效的，真正掌管生命周期的是proxy应该调用proxy.finish()，所以百度开源框架 dynamic-load-apk使用that指向proxy，约定插件中使用that来代替this。二、 插件Activity无法深度演绎正直的Activity组件，可能有些高级特性无法使用。
+[https://github.com/liuguangli/ProxyPluginActivityDemo](https://github.com/liuguangli/ProxyPluginActivityDemo)，如果你有兴趣，一定要star，日后研究研究。代理方式实现起来比较简单，也比较好理解，但是有很多缺陷：一、插件Activity不能使用this关键字，比如this.finish()方法是无效的，真正掌管生命周期的是proxy应该调用proxy.finish()，所以百度开源框架 dynamic-load-apk使用that指向proxy，约定插件中使用that来代替this。二、 插件Activity无法深度演绎真正的Activity组件，可能有些高级特性无法使用。
 
 总之，不够透明，插件开发需要定义自己的规范。既然如此，有没有更好的方案？当然有，后续文章继续研究插件化如何注册组件的第二类思路：“占坑”方式实现插件Activity的注册。
