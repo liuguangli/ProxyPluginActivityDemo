@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+
+    <LinearLayout android:layout_width="100dp"
+                  android:layout_height="match_parent"
+                  android:background="#ff0000"
+                  android:orientation="vertical">
+        <Button android:layout_width="100dp"
+                   android:layout_height="100dp"
+                   android:background="#333333"
+
+                   />
+        <TextView android:layout_width="100dp"
+                  android:layout_height="100dp"
+                  android:text="@string/plugin"
+                  android:gravity="center"
+                  android:background="#33af33"
+                  android:id="@+id/text"
+            />
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+        >
+        <Button android:layout_width="match_parent"
+              android:layout_height="100dp"
+              android:text="click to another activity"
+                android:id="@+id/btn"
+            />
+        <View android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#00fafa"/>
+    </LinearLayout>
+</LinearLayout>
