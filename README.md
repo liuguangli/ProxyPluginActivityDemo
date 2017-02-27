@@ -2,7 +2,7 @@
 一个demo，代理方式实现插件化，一个最简单的插件框架雏形。
 
 #博客
-文章首发：[插件化研究代之Activity注册｜大利猫](http://www.liuguangli.win/?p=387)
+文章首发：[插件化研究之Activity注册｜大利猫](http://www.liuguangli.win/?p=387)
 
 最近在研究Android应用的插件化开发，看了好几个相关的开源项目。  插件化都是在解决以下几个问题：
 * [如何把插件apk中的代码和资源加载到当前虚拟机](http://www.liuguangli.win/?p=366)。
@@ -12,13 +12,13 @@
 在上篇文章中我研究了[如何获取并使用插件apk中的资源](http://www.liuguangli.win/?p=370)的问题（文本、图片、布局等），前面两篇文章解决了插件化研究的第一个问题。本篇文章开始研究第二个问题：“注册”插件中的四大组件。
 <br>
 
-在安装apk的时候，应用管理服务PackageManagerService会解析apk，解析应用程序配置文件AndroidManifest.xml，并从里面得到得到应用得到应用程序的组件Activity、Service、Broadcast Receiver和Content Provider等信息，对应用的每个组件“登记”，“登记”之后，在启动某个Activity过程在ASM之行时对不“登记”然后“查有此人”从允许后续的启动行为。详细过程可以参考[《Android应用程序安装过程源代码分析》](http://blog.csdn.net/luoshengyang/article/details/6689748)。然而，插件apk并没有进行安装，自然apk中定义的四大组件也没有进行“登记”，那么问题来了：以Activity为例，如何启动插件中的Acivity？大体两种思路。
+在安装apk的时候，应用管理服务PackageManagerService会解析apk，解析应用程序配置文件AndroidManifest.xml，并从里面得到得到应用得到应用程序的组件Activity、Service、Broadcast Receiver和Content Provider等信息，对应用的每个组件“登记”，“登记”之后，在启动某个Activity过程在ASM执行时对比“登记”然后“查有此人”允许后续的启动行为。详细过程可以参考[《Android应用程序安装过程源代码分析》](http://blog.csdn.net/luoshengyang/article/details/6689748)。然而，插件apk并没有进行安装，自然apk中定义的四大组件也没有进行“登记”，那么问题来了：以Activity为例，如何启动插件中的Acivity？大体两种思路。
 
 ##一、 代理方式实现。
 宿主端实现一个 PluginProxyActivity，使用这个Activity代理插件中的Activity的重要事务，例如生命周期调用、contentview设置、Activity跳转等事务。PluginProxyActivity注册在宿主中，启动插件中的Activity实际就是启动PluginProxyActivity，只是加载的布局和方法逻辑不一样而已。百度的插件框架dynamic-load-apk就是使用的这种方式。
 
 ##二、“占坑”方式实现。
-启动Activity是一个复杂的过程，有很多环节：Activity.startActivity()->Activity.startActivityForResult()->Instrument.excuteStartActivity()->ASM.startActivity()。大概又这么几个环节，详细了解可以参考文章：[《深入理解Activity的启动过程》](http://www.cloudchou.com/android/post-788.html)。 所谓“占坑”在宿主端的AndroidManifest.xml注册一个不存在的Activity，可以取名为StubActivity，同样启动插件的Activity都是启动StubActivity，然后在启动Activity的某个环节，我们找个“临时”演员来代替StubActivity，这个临时演员就是插件中定义的Activity，这叫“瞒天过海”。如何找“临时”演员，这个过程又有很多几种实现手段，DroidPlugin、dwarf等框架实现手段个有不同，详细后续文章再讨论。<br>
+启动Activity是一个复杂的过程，有很多环节：Activity.startActivity()->Activity.startActivityForResult()->Instrument.excuteStartActivity()->ASM.startActivity()。大概又这么几个环节，详细了解可以参考文章：[《深入理解Activity的启动过程》](http://www.cloudchou.com/android/post-788.html)。 所谓“占坑”在宿主端的AndroidManifest.xml注册一个不存在的Activity，可以取名为StubActivity，同样启动插件的Activity都是启动StubActivity，然后在启动Activity的某个环节，我们找个“临时”演员来代替StubActivity，这个临时演员就是插件中定义的Activity，这叫“瞒天过海”。如何找“临时”演员，这个过程又有很多种实现手段，DroidPlugin、dwarf等框架实现手段各有不同，详细后续文章再讨论。<br>
 
 简单解释了两种思路，本文先用demo来说说如何实现第一种思路（后续文章研究下第二思路）。
 
@@ -141,6 +141,6 @@
     }
 #最重要的demo
 demo实现啦一个插件的框架的最基本雏形，地址：
-[https://github.com/liuguangli/ProxyPluginActivityDemo](https://github.com/liuguangli/ProxyPluginActivityDemo)，如果你有兴趣，一定要star，日后研究研究。代理方式实现起来比较简单，也比较好理解，但是有很多缺陷：一、插件Activity不能使用this关键字，比如this.finish()方法是无效的，真正掌管生命周期的是proxy应该调用proxy.finish()，所以百度开源框架 dynamic-load-apk使用that指向proxy，约定插件中使用that来代替this。二、 插件Activity无法深度演绎正直的Activity组件，可能有些高级特性无法使用。
+[https://github.com/liuguangli/ProxyPluginActivityDemo](https://github.com/liuguangli/ProxyPluginActivityDemo)，如果你有兴趣，一定要star，日后研究研究。代理方式实现起来比较简单，也比较好理解，但是有很多缺陷：一、插件Activity不能使用this关键字，比如this.finish()方法是无效的，真正掌管生命周期的是proxy应该调用proxy.finish()，所以百度开源框架 dynamic-load-apk使用that指向proxy，约定插件中使用that来代替this。二、 插件Activity无法深度演绎真正的Activity组件，可能有些高级特性无法使用。
 
 总之，不够透明，插件开发需要定义自己的规范。既然如此，有没有更好的方案？当然有，后续文章继续研究插件化如何注册组件的第二类思路：“占坑”方式实现插件Activity的注册。
