@@ -13,7 +13,7 @@ public class MainActivity extends BasePluginActivity {
 
         setContentView(R.layout.activity_main);
         TextView textView = (TextView) findViewById(R.id.text);
-        textView.setText("plugin findView");
+        textView.setText(getString(R.string.plugin));
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

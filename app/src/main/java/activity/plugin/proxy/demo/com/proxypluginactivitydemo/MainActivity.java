@@ -2,12 +2,12 @@ package activity.plugin.proxy.demo.com.proxypluginactivitydemo;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.plugin.PluginManager;
 
@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,11 +28,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        findViewById(R.id.btn_to_plugin).setOnClickListener(new View.OnClickListener(){
+        Button button = (Button) findViewById(R.id.btn_to_plugin);
+        button.setText(getResources().getString(R.string.app_name));
+
+        button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                PluginManager.getInstace().startPlugin(MainActivity.this);
+                PluginManager.getInstance().startPlugin(MainActivity.this);
             }
         });
     }

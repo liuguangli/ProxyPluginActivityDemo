@@ -34,7 +34,7 @@ public class PluginProxyActivity extends Activity implements IProxyPluginAct{
 
     private void initPluginInstance(String className) {
         try {
-            pluginClass = PluginManager.getInstace().getCloassLoader().loadClass(className);
+            pluginClass = PluginManager.getInstance().getClassLoader().loadClass(className);
             Constructor<?> localConstructor = pluginClass.getConstructor(new Class[]{});
             pluginInstance = localConstructor.newInstance(new Object[] {});
             // 把当前的代理Activity注入到插件中
@@ -51,10 +51,10 @@ public class PluginProxyActivity extends Activity implements IProxyPluginAct{
     @Override
     public void setContentView(int layoutResID) {
         // do something plugin need
-        Resources resources = PluginManager.getInstace().getResources();
+       Resources resources = PluginManager.getInstance().getResources();
         XmlPullParser xmlResourceParser = resources.getLayout(layoutResID);
         View viewFromPlugin = LayoutInflater.from(this).inflate(xmlResourceParser, null);
-        setContentView(viewFromPlugin);
+        super.setContentView(viewFromPlugin);
 
     }
 
@@ -107,4 +107,8 @@ public class PluginProxyActivity extends Activity implements IProxyPluginAct{
         }
     }
 
+    @Override
+    public Resources getResources() {
+        return getApplication().getResources();
+    }
 }
