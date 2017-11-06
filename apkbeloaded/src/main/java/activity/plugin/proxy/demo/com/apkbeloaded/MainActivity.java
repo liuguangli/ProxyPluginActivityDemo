@@ -10,7 +10,7 @@ import com.plugin.BasePluginActivity;
 public class MainActivity extends BasePluginActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TextView textView = (TextView) findViewById(R.id.text);
         textView.setText(getString(R.string.plugin));
