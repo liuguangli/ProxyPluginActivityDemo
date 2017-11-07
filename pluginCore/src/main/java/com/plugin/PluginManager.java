@@ -25,8 +25,9 @@ public class PluginManager {
     private static final String OPT_DIR = "opt";
     private static final String LIB_DIR = "lib";
     private  static  PluginManager instance;
+    private AssetManager assetManager;
     private Resources resources;
-
+    private Resources appResources;
     private ClassLoader classLoader;
     private PackageInfo packageInfo;
     private Context pluginContext;
@@ -44,6 +45,8 @@ public class PluginManager {
         String desPath = file.getAbsolutePath()+"/bundle1.apk";
         copy(apkPath, desPath);
         installClass(context, desPath);
+        initAppResources(context, desPath);
+        installRes(context, desPath);
         initPluginInfo(context,desPath);
     }
     public void copy( String src, String des) {
@@ -83,19 +86,51 @@ public class PluginManager {
     }
 
 
+    private void installRes(Context context,String apkPath) {
+        Log.d(TAG, "加载资源");
+        createAssetManager(apkPath);
+        resources = getBundleResource(context,apkPath);
+    }
 
+    private void initAppResources(Context context,String apkPath){
+        try {
+            Log.d(TAG, "初始化 Resource 对象");
+            AssetManager assetManager = context.getAssets();
+            AssetManager.class.getDeclaredMethod("addAssetPath", String.class).invoke(
+                    assetManager, apkPath);
+            appResources = new Resources(assetManager,
+                    context.getResources().getDisplayMetrics(),
+                    context.getResources().getConfiguration());
+            Log.d(TAG, "初始化 Resource 完成");
+        } catch (Throwable th) {
+            th.printStackTrace();
+            Log.d(TAG, "初始化 Resource 失败:" + th.getMessage());
+        }
 
+    }
 
-
-
+    private AssetManager createAssetManager(String apkPath) {
+        try {
+            Log.d(TAG, "创建AssetManager");
+            assetManager = AssetManager.class.newInstance();
+            AssetManager.class.getDeclaredMethod("addAssetPath", String.class).invoke(
+                    assetManager, apkPath);
+            return assetManager;
+        } catch (Throwable th) {
+            th.printStackTrace();
+            Log.d(TAG, "创建AssetManager失败：" + th.getMessage());
+        }
+        return null;
+    }
     private void  initPluginInfo(Context context,String apkPath){
         PackageManager pm = context.getPackageManager();
         packageInfo = pm.getPackageArchiveInfo(apkPath, PackageManager.GET_ACTIVITIES);
-        String packageName = packageInfo.packageName;
+        String packageName = context.getPackageName();
         if (packageName != null && packageName.length() > 0) {
             final Application application = (Application) context;
             try {
                 pluginContext = application.createPackageContext(packageName, Context.CONTEXT_RESTRICTED | Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+
             } catch (PackageManager.NameNotFoundException e) {
                 String msg = String.format("创建pkg: %s 上下文失败", packageName);
                Log.e(TAG, "pluginContext 创建失败，" + msg);
@@ -108,7 +143,13 @@ public class PluginManager {
         return resources;
     }
 
-
+    private Resources getBundleResource(Context context, String apkPath){
+        if (resources != null){
+            return resources;
+        }
+        AssetManager assetManager = createAssetManager(apkPath);
+        return new Resources(assetManager, context.getResources().getDisplayMetrics(), context.getResources().getConfiguration());
+    }
 
     public ClassLoader getClassLoader() {
         return classLoader;
@@ -128,6 +169,9 @@ public class PluginManager {
     }
 
 
+    public Resources getAppResource() {
+        return appResources;
+    }
 
     public Context getPluginContext() {
         return pluginContext;

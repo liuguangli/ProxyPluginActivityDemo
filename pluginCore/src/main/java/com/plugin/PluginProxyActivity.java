@@ -50,7 +50,6 @@ public class PluginProxyActivity extends Activity implements IProxyPluginAct{
 
     @Override
     public void attach(Activity var1) {
-
         invokePluginMethod("attach",
                 new Class[]{Activity.class},
                 new Object[]{var1});
@@ -101,7 +100,7 @@ public class PluginProxyActivity extends Activity implements IProxyPluginAct{
     @Override
     public void setContentView(int layoutResID) {
         // do something plugin need
-       Resources resources = pluginContext.getResources();
+        Resources resources = PluginManager.getInstance().getResources();
         XmlPullParser xmlResourceParser = resources.getLayout(layoutResID);
         rootView = LayoutInflater.from(this).inflate(xmlResourceParser, null);
         super.setContentView(rootView);

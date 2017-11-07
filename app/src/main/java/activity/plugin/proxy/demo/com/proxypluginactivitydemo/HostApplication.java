@@ -13,7 +13,7 @@ public class HostApplication extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        String plugPath = Environment.getExternalStorageDirectory() + "/bundle1.apk";
+        String plugPath = Environment.getExternalStorageDirectory() + "/bundle2.apk";
         PluginManager.getInstance().install(this, plugPath);
     }
 

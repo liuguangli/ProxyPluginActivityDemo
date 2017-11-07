@@ -31,7 +31,7 @@
             android:id="@+id/btn"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:text="@string/click_to_an" />
+            android:text="跳转" />
 
         <View
             android:layout_width="match_parent"
