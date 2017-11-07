@@ -21,17 +21,21 @@
                   android:id="@+id/text"
             />
     </LinearLayout>
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="vertical"
-        >
-        <Button android:layout_width="match_parent"
-              android:layout_height="100dp"
-              android:text="click to another activity"
-                android:id="@+id/btn"
-            />
-        <View android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#00fafa"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="@string/click_to_an" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00fafa" />
     </LinearLayout>
 </LinearLayout>
